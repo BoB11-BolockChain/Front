@@ -13,7 +13,7 @@
         <div class="row justify-content-between">
             <?php while($rows = $query->fetchArray(SQLITE3_ASSOC)){?>
             <div class="col-12 col-md-5 col-lg-4 mb-6 mb-md-5">
-                <div class="btn-info-sj card bg-primary shadow-soft border-light text-center" id="<?php echo $rows['num'];?>">
+                <div class="btn-info-sj card bg-primary shadow-soft border-light text-center" id="exer<?php echo $rows['num'];?>">
                     <div class="text-center pt-2 pb-2"><?php echo $rows['title']; ?></div>
                     <div>
                         <p><?php echo $rows['desc']; ?></p>
@@ -61,8 +61,8 @@
                         <span class="card-text stmall"></span>
                     </div>
                     <div class="card-body">
-                        <h3 id="sj-try">hi</h3>
-                        <p id="sj-try2">test</p>
+                        <h3 id="sj-title">hi</h3>
+                        <p id="sj-desc">test</p>
                         <div id="training_info">
                             <form id="training_start" action="admin.ch.php" method="POST">
                                 <input type="hidden" name="training_num">
@@ -73,7 +73,7 @@
                         <div id="http_info"></div>
                     </div>
                     <div class="card-footer">
-                        <span id="sj-try3">hihihi</span>
+                        <span id="sj-score">hihihi</span>
                     </div>
                 </div>
             </div>
@@ -81,29 +81,39 @@
 </section>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
 
-// function select_title($count) {
+<!-- // function select_title($count) {
 //         $database = new SQLite3('./maindb.db');
 //         $info_query = $database->query("SELECT * FROM challenges WHERE num=$count;");
 //         while($info_row = $info_query->fetchArray(SQLITE3_ASSOC)) {
 //             return $info_row['title'];
 //         }
 //     }
-$(document).ready(function(){
-$('.btn-info-sj').click(function(){
-var click_id = $(this).attr("id");
+// $(document).ready(function(){
+// $('.btn-info-sj').click(function(){
+// var click_id = $(this).attr("id"); -->
 <?php
-    $info_query = $database -> query("SELECT * FROM challenges WHERE num=$count;");
-    while($info_row = $info_query -> fetchArray(SQLITE3_ASSOC)) { ?>
-            var title = $info_row['title'];
-            var desc = $info_row['desc'];
-            var score = $info_row['score'];
-            var os = $info_row['os'];
-            document.getElementById("sj-try").innerHTML = title;
-       <?php } ?>
-});
-});
+    $DB = new SQLite3('./maindb.db');
+    for ($i = 1; $i < $ch_count+1; $i=$i+1) {
+        $getId = "exer" . $i;
+        ?>
+        <script>document.getElementById(<?php echo "'$getId'" ?>).addEventListener('click', e => {
+            <?php 
+            $info_query = $DB -> query("SELECT * FROM challenges WHERE num= $i;");
+            while($info_row = $info_query -> fetchArray(SQLITE3_ASSOC)) { 
+            $title = $info_row['title'];
+            $desc = $info_row['desc'];
+            $score = $info_row['score'];
+            $os = $info_row['os'];} ?>
+            document.getElementById("sj-title").innerText = <?php echo "'" . $title . "'"; ?>;
+            document.getElementById("sj-desc").innerText = <?php echo "'" . $desc . "'"; ?>;
+            document.getElementById("sj-score").innerText = <?php echo "'" . $score . "'"; ?>;
+        }         
+        );</script> <?php
+        }
+        ?>
+// });
+// });
 
 </script>
 
